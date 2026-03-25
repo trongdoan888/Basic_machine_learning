@@ -1,0 +1,11 @@
+# Bỏ qua môi trường ảo
+venv/
+env/
+
+# Bỏ qua toàn bộ dữ liệu nặng
+data/
+*.csv
+
+# Bỏ qua rác của Python
+__pycache__/
+*.pyc
