@@ -13,37 +13,53 @@ print("🚀 HUẤN LUYỆN CHUYÊN GIA: LOGISTIC REGRESSION (SSDP FLOOD)")
 print("="*65)
 
 file_path = 'data/dataset_SSDP_Flood_FULL_20cols.csv'
-print(f"[1/6] Đang nạp dữ liệu từ: {file_path}")
+print(f"[1/7] Đang nạp dữ liệu từ: {file_path}")
 start_time = time.time()
 df = pd.read_csv(file_path)
 
+# ==========================================
+# MÀNG LỌC DỮ LIỆU (Chống lỗi NaN và Vô cực)
+# ==========================================
+print("[2/7] Đang dọn dẹp dữ liệu (Loại bỏ NaN và Vô cực)...")
+df = df.replace([np.inf, -np.inf], np.nan).dropna()
+print(f"      -> Kích thước dữ liệu sạch: {df.shape[0]:,} dòng.")
+
 X = df.drop('Label', axis=1)
 y = df['Label']
-feature_names = X.columns # Tự động lấy tên từ file CSV
 
-print("[2/6] Đang chia tập Huấn luyện và Kiểm thử...")
+# Sử dụng tên đặc trưng chuyên ngành (Tiếng Anh)
+feature_names = [
+    'F1 (MAC-IP: Weight)', 'F2 (MAC-IP: Mean)', 'F3 (MAC-IP: Variance)',
+    'F4 (Source IP: Weight)', 'F5 (Source IP: Mean)', 'F6 (Source IP: Variance)',
+    'F7 (Channel IP-IP: Weight)', 'F8 (Channel IP-IP: Mean)', 'F9 (Channel IP-IP: Variance)',
+    'F10 (Channel IP-IP: Magnitude)', 'F11 (Channel IP-IP: Radius)', 'F12 (Channel IP-IP: Covariance)', 'F13 (Channel IP-IP: Correlation)',
+    'F14 (Channel Jitter: Weight)', 'F15 (Channel Jitter: Mean)', 'F16 (Channel Jitter: Variance)',
+    'F17 (Socket IP-Port: Weight)', 'F18 (Socket IP-Port: Mean)', 'F19 (Socket IP-Port: Variance)', 'F20 (Socket IP-Port: Magnitude)'
+]
+
+print("[3/7] Đang chia tập Huấn luyện và Kiểm thử...")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
 
-print("[3/6] Đang chuẩn hóa dữ liệu (StandardScaler)...")
+print("[4/7] Đang chuẩn hóa dữ liệu (StandardScaler)...")
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test) 
 
-print("[4/6] Đang huấn luyện Hồi quy Logistic...")
+print("[5/7] Đang huấn luyện Hồi quy Logistic...")
 train_start = time.time()
 lr_model = LogisticRegression(max_iter=1000, random_state=42)
 lr_model.fit(X_train_scaled, y_train)
 train_end = time.time()
 print(f"      -> Thời gian huấn luyện: {train_end - train_start:.2f} giây.")
 
-print("[5/6] Đang dự đoán trên tập Kiểm thử...")
+print("[6/7] Đang dự đoán trên tập Kiểm thử...")
 y_pred = lr_model.predict(X_test_scaled)
 acc = accuracy_score(y_test, y_pred)
 print(f"\n✅ ĐỘ CHÍNH XÁC TỔNG THỂ (Accuracy): {acc * 100:.4f}%\n")
 print("📊 BẢNG BÁO CÁO PHÂN LOẠI:")
 print(classification_report(y_test, y_pred, target_names=['Bình thường (0)', 'SSDP Flood (1)']))
 
-print("[6/6] Đang xuất biểu đồ Ma trận nhầm lẫn & Trọng số...")
+print("[7/7] Đang xuất biểu đồ Ma trận nhầm lẫn & Trọng số...")
 cm = confusion_matrix(y_test, y_pred)
 plt.figure(figsize=(7, 5))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Purples',
