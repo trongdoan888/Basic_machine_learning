@@ -4,7 +4,12 @@ env/
 
 # Bỏ qua toàn bộ dữ liệu nặng
 data/
+archive/
+archive.zip
 *.csv
+
+# Bỏ qua các mô hình đã huấn luyện (file lớn)
+models/
 
 # Bỏ qua rác của Python
 __pycache__/
