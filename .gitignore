@@ -1,0 +1,40 @@
+# =============================================
+# WordPress - .gitignore
+# =============================================
+
+# Bỏ qua file cấu hình chứa thông tin nhạy cảm (DB, secret keys)
+wp-config.php
+
+# Bỏ qua thư mục backup All-in-One WP Migration (1.7 GB)
+wp-content/ai1wm-backups/
+
+# Bỏ qua media uploads (1.4 GB ảnh/video)
+wp-content/uploads/
+
+# Bỏ qua cache
+wp-content/cache/
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+
+# Bỏ qua log files
+*.log
+debug.log
+
+# Bỏ qua node_modules nếu có
+node_modules/
+vendor/
+
+# Bỏ qua file OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Bỏ qua IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Bỏ qua file môi trường
+.env
+.env.local
